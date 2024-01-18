@@ -40,4 +40,37 @@ class ChampionshipController extends Controller
 
         return json_encode($list);
     } 
+
+    public function sendTeams(Request $request){
+        
+        $championId = $request->championship;
+
+
+        $championship = Championships::where('id', '=', $championId)->select('teams')->first();
+        
+        if($championship->teams !== null){
+
+            $teamFormat = str_replace("]", "",  str_replace("[", "", $championship->teams));
+        
+            $teamExplode = explode(",",$teamFormat);
+
+            if(count($teamExplode) === 8){
+                return response("Limite de time para o campeonato atingido", 401);
+            }else{
+                foreach($teamExplode as $team){
+                    $newTeam[] = str_replace('"',"",$team);
+                }
+                $newTeam[] = $request->name;
+
+                Championships::where('id', '=', $championId)->update(['teams' => json_encode($newTeam)]);
+            }
+
+        }else{
+
+            $newTeam[] = $request->name;
+            Championships::where('id', '=', $championId)->update(['teams' => json_encode($newTeam)]);
+        }
+
+        return response('sucess', 200);
+    }
 }

@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Championships extends Model
 {
     use HasFactory;
+
+    protected $table = "championships";
+
+    protected $fillable = [
+        'teams'
+    ];
 }

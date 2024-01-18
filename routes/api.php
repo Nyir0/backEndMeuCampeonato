@@ -22,3 +22,5 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::get('/championship', [ChampionshipController::class, 'getAll']);
 
 Route::get('/teams', [ChampionshipController::class, 'getTeams']);
+
+Route::post('/championship/send_team', [ChampionshipController::class, 'sendTeams']);
