@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('matches', function (Blueprint $table) {
+        Schema::create('history', function (Blueprint $table) {
             $table->id();
-            $table->integer('championship');
-            $table->string('team_A');
-            $table->string('team_B');
-            $table->integer('gol_team_A')->nullable();
-            $table->integer('gol_team_B')->nullable();
-            $table->enum('winner', ['team_A', 'team_B', 'draw'])->default('draw');
+            $table->string('championship');
+            $table->JSON('matches');
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('matches');
+        Schema::dropIfExists('history');
     }
 };

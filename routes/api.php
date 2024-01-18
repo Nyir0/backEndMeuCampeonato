@@ -24,3 +24,7 @@ Route::get('/championship', [ChampionshipController::class, 'getAll']);
 Route::get('/teams', [ChampionshipController::class, 'getTeams']);
 
 Route::post('/championship/send_team', [ChampionshipController::class, 'sendTeams']);
+
+Route::get('/simulation', [ChampionshipController::class, 'simulation']);
+
+Route::get('/history', [ChampionshipController::class, 'history']);
