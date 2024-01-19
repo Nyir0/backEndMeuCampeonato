@@ -122,19 +122,19 @@ class ChampionshipController extends Controller
 
         // Quartas de Final
         list($quartasFinalVencedores, $quartasFinalResults) = $this->simulatePhase($equipesRestantes);
-        $allResults["Quatas de final"] = $quartasFinalResults;
+        $allResults["quartas_de_final"] = $quartasFinalResults;
 
         // Semifinais
         list($semifinaisVencedores, $semifinaisResults) = $this->simulatePhase($quartasFinalVencedores);
-        $allResults["Semi-final"] = $semifinaisResults;
+        $allResults["semi_final"] = $semifinaisResults;
 
         // Disputa pelo Terceiro Lugar
         list($terceiroLugar, $terceiroLugarResults) = $this->simulatePhase(array_values(array_diff($quartasFinalVencedores, $semifinaisVencedores)));
-        $allResults["Terceiro lugar"] = $terceiroLugarResults;
+        $allResults["terceiro_lugar"] = $terceiroLugarResults;
 
         // Final
         list($campeao, $finalResults) = $this->simulatePhase($semifinaisVencedores);
-        $allResults["Final"] = $finalResults;
+        $allResults["final"] = $finalResults;
 
         // Encontrar o time que perdeu na final como vice-campeão
         if($semifinaisVencedores[0] === $campeao[0]){
@@ -163,11 +163,19 @@ class ChampionshipController extends Controller
         if(empty($history)){
             return 'Sem historico';
         };
-
+        
         foreach($history as $index){
-            $result[] = $index->matches;
+            $results = json_decode($index->matches);
+
+            $championship = Championships::where('id', '=', $index->championship)->select('name')->first();
+
+            $results->championship = $championship->name;
+
+            $results->date = date("d/m/Y H:i", strToTime($index->created_at));
+            
+            $response[] = $results;
         }
 
-        return $result;
+        return $response;
     }
 }
